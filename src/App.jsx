@@ -13,12 +13,14 @@ function App({ route }) {
   const [finishedGame, setFinishedGame] = useState(false);
   const [board, setBoard] = useState(Array(9).fill(null));
   const [message, setMessage] = useState(WELCOME_MESSAGE);
+  const [highlightedLine, setHighlightedLine] = useState([]);
 
   function checkWinner(newBoard) {
-    const winner = calculateWinner(newBoard);
+    const {winnerLine, winner} = calculateWinner(newBoard);
     if(winner) {
       setMessage(`Ganó ${winner} 😄`);
       setFinishedGame(true);
+      setHighlightedLine(winnerLine);
     }
     else if(newBoard.every(square => square !== null)) {
       setMessage(`La partida terminó en empate 😅`);
@@ -54,6 +56,7 @@ function App({ route }) {
     setPlayerIsNext(randomTrueOrFalse());
     setMessage('A jugar 🧐');
     setFinishedGame(false);
+    setHighlightedLine([]);
   }
 
   function handleCellPress(position) {
@@ -76,19 +79,73 @@ function App({ route }) {
       </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <View style={styles.row}>
-          <Cell position={0} onPress={handleCellPress} value={board[0]} disabled={finishedGame || !playerIsNext} />
-          <Cell position={1} onPress={handleCellPress} value={board[1]} disabled={finishedGame || !playerIsNext} />
-          <Cell position={2} onPress={handleCellPress} value={board[2]} disabled={finishedGame || !playerIsNext} />
+          <Cell
+            position={0}
+            onPress={handleCellPress}
+            value={board[0]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(0)}
+          />
+          <Cell
+            position={1}
+            onPress={handleCellPress}
+            value={board[1]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(1)}
+          />
+          <Cell
+            position={2}
+            onPress={handleCellPress}
+            value={board[2]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(2)}
+          />
         </View>
         <View style={styles.row}>
-          <Cell position={3} onPress={handleCellPress} value={board[3]} disabled={finishedGame || !playerIsNext} />
-          <Cell position={4} onPress={handleCellPress} value={board[4]} disabled={finishedGame || !playerIsNext} />
-          <Cell position={5} onPress={handleCellPress} value={board[5]} disabled={finishedGame || !playerIsNext} />
+          <Cell
+            position={3}
+            onPress={handleCellPress}
+            value={board[3]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(3)}
+          />
+          <Cell
+            position={4}
+            onPress={handleCellPress}
+            value={board[4]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(4)}
+          />
+          <Cell
+            position={5}
+            onPress={handleCellPress}
+            value={board[5]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(5)}
+          />
         </View>
         <View style={styles.row}>
-          <Cell position={6} onPress={handleCellPress} value={board[6]} disabled={finishedGame || !playerIsNext} />
-          <Cell position={7} onPress={handleCellPress} value={board[7]} disabled={finishedGame || !playerIsNext} />
-          <Cell position={8} onPress={handleCellPress} value={board[8]} disabled={finishedGame || !playerIsNext} />
+          <Cell
+            position={6}
+            onPress={handleCellPress}
+            value={board[6]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(6)}
+          />
+          <Cell
+            position={7}
+            onPress={handleCellPress}
+            value={board[7]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(7)}
+          />
+          <Cell
+            position={8}
+            onPress={handleCellPress}
+            value={board[8]}
+            disabled={finishedGame || !playerIsNext}
+            highlight={finishedGame && highlightedLine.includes(8)}
+          />
         </View>
       </View>
       <View style={styles.messageView}>

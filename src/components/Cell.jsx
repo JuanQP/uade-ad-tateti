@@ -4,7 +4,7 @@ import { TouchableRipple } from "react-native-paper";
 
 const BORDER_COLOR = 'gray';
 
-function Cell({ position, value, disabled, onPress }) {
+function Cell({ position, value, disabled, highlight, onPress }) {
   const row = Math.floor(position / 3);
   const column = position % 3;
   const vertical = row === 0 ? 'upper' : row === 1 ? 'mid' : 'bottom';
@@ -16,7 +16,11 @@ function Cell({ position, value, disabled, onPress }) {
   }
 
   return (
-    <TouchableRipple disabled={value || disabled} onPress={handlePress}>
+    <TouchableRipple
+      disabled={value || disabled}
+      onPress={handlePress}
+      style={{ backgroundColor: highlight ? '#C1E1C1' : 'transparent' }}
+    >
       <Text style={{...styles.mark, ...styles[positionString]}}>
         {value === 'X'? '❌' : value === 'O' ? '⭕' : ''}
       </Text>

@@ -17,3 +17,18 @@ export function calculateWinner(squares) {
   }
   return null;
 }
+
+export function randomTrueOrFalse() {
+  return Math.random() < 0.5 ? true : false;
+}
+
+export function pickEmptySquare(board) {
+  const emptyPositions = board
+    .map((s, i) => ({value: s, position: i}))
+    .filter(e => e.value === null);
+  return pickRandom(emptyPositions).position;
+}
+
+export function pickRandom(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}

@@ -7,18 +7,22 @@ import { calculateWinner, pickEmptySquare, randomTrueOrFalse } from './helpers';
 const WELCOME_MESSAGE = 'Presioná el botón para empezar a jugar 😃';
 
 function App({ route }) {
-  const [playerName] = useState(route.params.name);
-  const [playerEmoji] = useState(route.params.selectedEmoji);
-  const [playerIsNext, setPlayerIsNext] = useState(randomTrueOrFalse());
+  const [player1Name] = useState(route.params.name1);
+  const [player1Emoji] = useState(route.params.selectedEmoji1);
+  const [player2Name] = useState(route.params.name2);
+  const [player2Emoji] = useState(route.params.selectedEmoji2);
+  const [player1IsNext, setPlayer1IsNext] = useState(randomTrueOrFalse());
   const [finishedGame, setFinishedGame] = useState(false);
   const [board, setBoard] = useState(Array(9).fill(null));
   const [message, setMessage] = useState(WELCOME_MESSAGE);
   const [highlightedLine, setHighlightedLine] = useState([]);
+  const [vsMachine] = useState(route.params.playerVsMachine);
 
   function checkWinner(newBoard) {
     const {winnerLine, winner} = calculateWinner(newBoard);
     if(winner) {
-      setMessage(`Ganó ${winner} 😄`);
+      const winnerName = player1Emoji === winner ? player1Name : player2Name;
+      setMessage(`Ganó ${winnerName} 🥳`);
       setFinishedGame(true);
       setHighlightedLine(winnerLine);
     }
@@ -29,31 +33,31 @@ function App({ route }) {
   }
 
   function formatNextMove() {
-    let nextPlayer = playerIsNext ? playerName : '🤖';
+    let nextPlayer = player1IsNext ? player1Name : player2Name;
     let nextEmoji;
-    if(playerIsNext) {
-      nextEmoji = playerEmoji === 'X' ? '❌' : '⭕';
+    if(player1IsNext) {
+      nextEmoji = player1Emoji === 'X' ? '❌' : '⭕';
     } else {
-      nextEmoji = playerEmoji === 'X' ? '⭕' : '❌';
+      nextEmoji = player2Emoji === 'X' ? '❌' : '⭕';
     }
     return finishedGame ? '' : `Es el turno de ${nextPlayer} (juega con ${nextEmoji})`;
   }
 
   useEffect(() => {
-    if(playerIsNext || finishedGame) return;
+    if(!vsMachine || player1IsNext || finishedGame) return;
     setTimeout(() => {
       const emptyPosition = pickEmptySquare(board);
       const newBoard = [...board];
-      newBoard[emptyPosition] = playerEmoji === 'X' ? 'O' : 'X';
+      newBoard[emptyPosition] = player1Emoji === 'X' ? 'O' : 'X';
       setBoard(newBoard);
-      setPlayerIsNext(true);
+      setPlayer1IsNext(true);
       checkWinner(newBoard);
     }, 500);
-  }, [playerIsNext, finishedGame]);
+  }, [player1IsNext, finishedGame]);
 
   function handleNewGamePress() {
     setBoard(Array(9).fill(null));
-    setPlayerIsNext(randomTrueOrFalse());
+    setPlayer1IsNext(randomTrueOrFalse());
     setMessage('A jugar 🧐');
     setFinishedGame(false);
     setHighlightedLine([]);
@@ -61,9 +65,9 @@ function App({ route }) {
 
   function handleCellPress(position) {
     const newBoard = [...board];
-    newBoard[position] = playerEmoji;
+    newBoard[position] = player1IsNext ? player1Emoji : player2Emoji;
     setBoard(newBoard);
-    setPlayerIsNext(false);
+    setPlayer1IsNext(vsMachine ? false : !player1IsNext);
     checkWinner(newBoard);
   }
 
@@ -74,7 +78,7 @@ function App({ route }) {
       </Appbar.Header>
       <View style={{flex: 0.25, alignItems: 'center', justifyContent: 'flex-end'}}>
         <Text style={{fontSize: 20}}>
-          {formatNextMove(finishedGame, playerIsNext, playerName, )}
+          {formatNextMove()}
         </Text>
       </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -83,21 +87,21 @@ function App({ route }) {
             position={0}
             onPress={handleCellPress}
             value={board[0]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(0)}
           />
           <Cell
             position={1}
             onPress={handleCellPress}
             value={board[1]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(1)}
           />
           <Cell
             position={2}
             onPress={handleCellPress}
             value={board[2]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(2)}
           />
         </View>
@@ -106,21 +110,21 @@ function App({ route }) {
             position={3}
             onPress={handleCellPress}
             value={board[3]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(3)}
           />
           <Cell
             position={4}
             onPress={handleCellPress}
             value={board[4]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(4)}
           />
           <Cell
             position={5}
             onPress={handleCellPress}
             value={board[5]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(5)}
           />
         </View>
@@ -129,21 +133,21 @@ function App({ route }) {
             position={6}
             onPress={handleCellPress}
             value={board[6]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(6)}
           />
           <Cell
             position={7}
             onPress={handleCellPress}
             value={board[7]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(7)}
           />
           <Cell
             position={8}
             onPress={handleCellPress}
             value={board[8]}
-            disabled={finishedGame || !playerIsNext}
+            disabled={finishedGame || (vsMachine && !player1IsNext)}
             highlight={finishedGame && highlightedLine.includes(8)}
           />
         </View>

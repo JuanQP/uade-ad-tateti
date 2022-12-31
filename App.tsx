@@ -1,13 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import App from "./src/App";
-import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TitleScreen from './src/TitleScreen';
+import { StatusBar } from 'expo-status-bar';
+import { Provider as PaperProvider } from 'react-native-paper';
+import App from "./src/App";
+import { CellValue } from './src/helpers';
 import PvMScreen from './src/PvMScreen';
 import PvPScreen from './src/PvPScreen';
+import TitleScreen from './src/TitleScreen';
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  GameScreen: {
+    name1: string;
+    selectedEmoji1: NonNullable<CellValue>;
+    name2: string;
+    selectedEmoji2: NonNullable<CellValue>;
+    playerVsMachine: boolean;
+  },
+  TitleScreen: undefined,
+  PvMScreen: undefined,
+  PvPScreen: undefined,
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function Main() {
   return (

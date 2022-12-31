@@ -1,12 +1,17 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import {
-  Button, RadioButton, Paragraph, Text, TextInput, Title,
+  Button, RadioButton, Text, TextInput
 } from "react-native-paper";
+import { RootStackParamList } from '../App';
+import { CellValue } from './helpers';
 
-function PvPScreen({ navigation }) {
+type Props = NativeStackScreenProps<RootStackParamList, "PvPScreen">;
+
+function PvPScreen({ navigation }: Props) {
   const [name1, setName1] = useState('');
-  const [selectedEmoji1, setSelectedEmoji1] = useState('');
+  const [selectedEmoji1, setSelectedEmoji1] = useState<NonNullable<CellValue>>('X');
   const [name2, setName2] = useState('');
 
   function handleStartButtonPress() {
@@ -75,7 +80,7 @@ function PvPScreen({ navigation }) {
       </View>
       <Button
         mode='contained'
-        disabled={name1 === '' || selectedEmoji1 === '' || name2 === ''}
+        disabled={name1 === '' || name2 === ''}
         onPress={handleStartButtonPress}
       >
         Comenzar

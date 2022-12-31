@@ -1,15 +1,33 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { TouchableRipple } from "react-native-paper";
+import { CellValue } from '../helpers';
 
 const BORDER_COLOR = 'gray';
 
-function Cell({ position, value, disabled, highlight, onPress }) {
+const styleKeysGrid: (keyof typeof styles)[][] = [
+  ["upperLeftCell", "upperMidCell", "upperRightCell"],
+  ["midLeftCell", "midMidCell", "midRightCell"],
+  ["bottomLeftCell", "bottomMidCell", "bottomRightCell"],
+]
+
+interface Props {
+  position: number;
+  value: CellValue;
+  disabled: boolean;
+  highlight?: boolean;
+  onPress: (position: number) => void;
+}
+
+function Cell({ position, value, disabled, highlight = false, onPress }: Props) {
   const row = Math.floor(position / 3);
   const column = position % 3;
-  const vertical = row === 0 ? 'upper' : row === 1 ? 'mid' : 'bottom';
-  const horizontal = column === 0 ? 'Left' : column === 1 ? 'Mid' : 'Right';
-  const positionString = `${vertical}${horizontal}Cell`;
+  const styleKey = styleKeysGrid[row][column]
+
+  const textStyle = {
+    ...styles.mark,
+    ...styles[styleKey],
+  }
 
   function handlePress() {
     onPress(position);
@@ -17,11 +35,11 @@ function Cell({ position, value, disabled, highlight, onPress }) {
 
   return (
     <TouchableRipple
-      disabled={value || disabled}
+      disabled={!!value || disabled}
       onPress={handlePress}
       style={{ backgroundColor: highlight ? '#C1E1C1' : 'transparent' }}
     >
-      <Text style={{...styles.mark, ...styles[positionString]}}>
+      <Text style={textStyle}>
         {value === 'X'? '❌' : value === 'O' ? '⭕' : ''}
       </Text>
     </TouchableRipple>

@@ -1,10 +1,14 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
-  Paragraph, Text, Title, TouchableRipple,
+  Paragraph, Text, Title, TouchableRipple
 } from "react-native-paper";
+import { RootStackParamList } from '../App';
 
-function TitleScreen({ navigation }) {
+type Props = NativeStackScreenProps<RootStackParamList, "TitleScreen">;
+
+function TitleScreen({ navigation }: Props) {
   function handlePvPPress() {
     navigation.navigate('PvPScreen');
   }
